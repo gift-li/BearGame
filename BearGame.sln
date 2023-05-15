@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BearGame", "BearGame\BearGame.vcxproj", "{4672DF0C-50C6-4F13-8358-9E2710F2E21F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4672DF0C-50C6-4F13-8358-9E2710F2E21F}.Debug|x64.ActiveCfg = Debug|x64
+		{4672DF0C-50C6-4F13-8358-9E2710F2E21F}.Debug|x64.Build.0 = Debug|x64
+		{4672DF0C-50C6-4F13-8358-9E2710F2E21F}.Debug|x86.ActiveCfg = Debug|Win32
+		{4672DF0C-50C6-4F13-8358-9E2710F2E21F}.Debug|x86.Build.0 = Debug|Win32
+		{4672DF0C-50C6-4F13-8358-9E2710F2E21F}.Release|x64.ActiveCfg = Release|x64
+		{4672DF0C-50C6-4F13-8358-9E2710F2E21F}.Release|x64.Build.0 = Release|x64
+		{4672DF0C-50C6-4F13-8358-9E2710F2E21F}.Release|x86.ActiveCfg = Release|Win32
+		{4672DF0C-50C6-4F13-8358-9E2710F2E21F}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {079A6C7E-D31A-4A81-A94A-215E3C2921FD}
+	EndGlobalSection
+EndGlobal
