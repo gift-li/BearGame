@@ -15,11 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BearGame.cpp">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
-    <ClCompile Include="test.cpp">
-      <Filter>來源檔案</Filter>
+    <ClCompile Include="Source.cpp">
+      <Filter>資源檔</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
