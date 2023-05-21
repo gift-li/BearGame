@@ -38,8 +38,5 @@
     <ClInclude Include="Character.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="enum.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

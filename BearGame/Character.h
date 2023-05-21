@@ -1,13 +1,48 @@
 #pragma once
-struct chracter
+#include <SFML/Graphics.hpp>
+#include <string>
+
+using namespace sf;
+using namespace std;
+
+class Character
 {
-	float pos_x;
-	float pos_y;
-	float acc_y;
-	int width;
-	int height;
-	float hit_space;
-	bool isHit = 0;
+public:
+	enum Type
+	{
+		Bear
+	};
+	enum Status
+	{
+		JUMP,
+		SQUAT,
+		IDLE
+	};
+	Character(Type);
+
+	// check method: whether collide with input
+	bool collide(Sprite);
+	// trigger event: when collide success
+	void hit();
+	// action method: jump
+	void jump();
+	// action method: squat
+	void squat();
+	// action method: idle
+	void idle();
+	// get current status
+	Status getStatus();
+private:
+	bool loadTexture(Type);
+	void setTexture(Type);
+
+	Sprite character;
+	custom_texture texture;
 	int hp;
-	char image[20];
+	Status status;
+};
+
+struct custom_texture
+{
+	Texture bear;
 };

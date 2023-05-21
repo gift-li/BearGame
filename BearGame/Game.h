@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
+#include "Character.h"
+#include "Obstacle.h"
 
 using namespace sf;
 using namespace std;
@@ -25,11 +27,12 @@ public:
 	void addObstacle();
 	void deleteObstacle();
 private:
-	void proccessInput();
+	void pressInput();
+	void releaseInput();
 
 	RenderWindow window;
 	Clock clock;
 
-	class Character* mCharacter;
-	vector<class Obstacle*> mObstacle;
+	Character mCharacter;
+	vector<Obstacle> mObstacle;
 };

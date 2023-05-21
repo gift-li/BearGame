@@ -1,11 +1,15 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
+#include "Character.h"
+
 using namespace sf;
+using namespace std;
 
 Game::Game()
 {
 	// Game class constructor
 	window.create(VideoMode(1440, 720), "Bear Game");
+	mCharacter = new Character(Character::Bear);
 }
 
 void Game::run()
@@ -35,7 +39,10 @@ void Game::watchEvent()
 		switch (event.type)
 		{
 		case Event::KeyPressed:
-			proccessInput();
+			pressInput();
+			break;
+		case Event::KeyReleased:
+			releaseInput();
 			break;
 		case Event::Closed:
 			window.close();
@@ -46,33 +53,50 @@ void Game::watchEvent()
 	}
 }
 
-void Game::proccessInput()
+void Game::pressInput()
 {
-	if (Keyboard::isKeyPressed(Keyboard::Up))
+	// trigger event when status is IDLE
+	if (mCharacter.getStatus() == Character::IDLE)
 	{
-		// do something
+		if (Keyboard::isKeyPressed(Keyboard::Up))
+		{
+			mCharacter.jump();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Down))
+		{
+			mCharacter.squat();
+		}
 	}
-	else if (Keyboard::isKeyPressed(Keyboard::Down))
-	{
-		// do something
-	}
+	// trigger props-cast event
 	else if (Keyboard::isKeyPressed(Keyboard::Space))
 	{
 		// do something
 	}
 }
 
+void Game::releaseInput()
+{
+	// set Character status as IDLE
+	mCharacter.idle();
+}
+
 void Game::checkCollision()
 {
-	/*
-	for (auto& obstacle : mObstacle)
+	vector<Obstacle> aliveObstacle;
+
+	for (Obstacle obstacle : mObstacle)
 	{
-		if (mCharacter.collide(obstacle))
+		if(mCharacter.collide(obstacle.getSprite()))
 		{
-			doSomething();
+			mCharacter.hit();
+		}
+		else
+		{
+			aliveObstacle.push_back(obstacle);
 		}
 	}
-	*/
+	// update mObstacle to alive obstacle
+	this->mObstacle = aliveObstacle;
 }
 
 void Game::update()
@@ -87,7 +111,10 @@ void Game::render()
 	// get objects to display
 
 	// draw objects
-	// window.draw();
+	for (Obstacle obstacle : mObstacle)
+	{
+		// window.draw(obstacle.getSprite());
+	}
 	
 	window.display();
 }

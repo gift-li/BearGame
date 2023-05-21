@@ -1,7 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <string>
-#include <vector>
 
 using namespace sf;
 using namespace std;
@@ -17,23 +15,25 @@ public:
 		MAGIC_HERB,
 		INVINCIBLE_HONEY,
 
-		// Don't remove: add entity above
+		// Don't remove: add enum entity above
 		LAST
 	};
 
 	Obstacle();
 
+	// generate Obstacle randomly
 	Sprite generate();
+	// generate Obstacle with required props
 	Sprite generate(Type);
-
+	// get drawable Sprite
 	Sprite getSprite();
 private:
-	bool LoadTexture();
+	bool loadTexture();
 	void setTexture(Type);
 	void setScale(Type);
 
 	Sprite obstacle;
-	custom_texture custom_texture;
+	custom_texture texture;
 };
 
 // Obstacle texture (image)
