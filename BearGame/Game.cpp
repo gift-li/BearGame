@@ -10,9 +10,16 @@ Game::Game()
 
 void Game::run()
 {
+	int time = 0;
+	int last_time = 0;
+
 	while (window.isOpen()) {
+		last_time = time;
+		time = clock.getElapsedTime().asSeconds();
 
 		watchEvent();
+
+		checkCollision();
 
 		update();
 
@@ -53,6 +60,19 @@ void Game::proccessInput()
 	{
 		// do something
 	}
+}
+
+void Game::checkCollision()
+{
+	/*
+	for (auto& obstacle : mObstacle)
+	{
+		if (mCharacter.collide(obstacle))
+		{
+			doSomething();
+		}
+	}
+	*/
 }
 
 void Game::update()

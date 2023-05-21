@@ -15,6 +15,7 @@ public:
 	void run();
 
 	void watchEvent();
+	void checkCollision();
 	void update();
 	void render();
 
@@ -27,9 +28,8 @@ private:
 	void proccessInput();
 
 	RenderWindow window;
+	Clock clock;
 
-	Texture texture;
-
-	Sprite mcharacter;
+	class Character* mCharacter;
 	vector<class Obstacle*> mObstacle;
 };
