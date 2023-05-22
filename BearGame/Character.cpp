@@ -7,12 +7,11 @@ using namespace std;
 
 Character::Character(Type type)
 {
-	if (!loadTexture(type))
+	if (loadTexture(type))
 	{
+		setTexture(type);
 		cout << "Load character texture success" << endl;
 	}
-
-	setTexture(type);
 }
 
 bool Character::collide(Sprite obstacle)
@@ -22,9 +21,17 @@ bool Character::collide(Sprite obstacle)
 		: false;
 }
 
+void Character::hit()
+{
+	if (this->HP >= 0)
+	{
+		this->reduceHP();
+	}
+}
+
 void Character::jump()
 {
-	status == Character::JUMP;
+	status = Character::JUMP;
 	// move Character Y-axis
 	// if not reach jump height: add Y-axis
 	//	else: minus Y-axis
@@ -35,7 +42,7 @@ void Character::jump()
 
 void Character::squat()
 {
-	status == Character::SQUAT;
+	status = Character::SQUAT;
 	// move Character Y-axis
 	// character.move(Vector2f());
 }
@@ -48,6 +55,11 @@ void Character::idle()
 Character::Status Character::getStatus()
 {
 	return this->status;
+}
+
+Sprite Character::getSprite()
+{
+	return this->character;
 }
 
 bool Character::loadTexture(Type type)
@@ -75,4 +87,9 @@ void Character::setTexture(Type type)
 		cout << "Invalid Character setTexture" << endl;
 		break;
 	}
+}
+
+void Character::reduceHP()
+{
+	this->HP--;
 }

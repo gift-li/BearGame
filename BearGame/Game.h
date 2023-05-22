@@ -12,7 +12,6 @@ class Game
 {
 public:
 	Game();
-	~Game() = default;
 
 	void run();
 
@@ -33,6 +32,6 @@ private:
 	RenderWindow window;
 	Clock clock;
 
-	Character mCharacter;
-	vector<Obstacle> mObstacle;
+	Character* mCharacter;
+	vector<Obstacle *> mObstacle;
 };

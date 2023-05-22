@@ -4,6 +4,16 @@
 using namespace sf;
 using namespace std;
 
+// Obstacle texture (image)
+struct Obstacle_texture
+{
+	Texture tree;
+	Texture eagle;
+	Texture giant_potion;
+	Texture magic_herb;
+	Texture invincible_honey;
+};
+
 class Obstacle
 {
 public:
@@ -33,15 +43,5 @@ private:
 	void setScale(Type);
 
 	Sprite obstacle;
-	custom_texture texture;
-};
-
-// Obstacle texture (image)
-struct custom_texture
-{
-	Texture tree;
-	Texture eagle;
-	Texture giant_potion;
-	Texture magic_herb;
-	Texture invincible_honey;
+	Obstacle_texture texture;
 };

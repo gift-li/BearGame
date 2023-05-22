@@ -56,15 +56,15 @@ void Game::watchEvent()
 void Game::pressInput()
 {
 	// trigger event when status is IDLE
-	if (mCharacter.getStatus() == Character::IDLE)
+	if (mCharacter->getStatus() == Character::IDLE)
 	{
 		if (Keyboard::isKeyPressed(Keyboard::Up))
 		{
-			mCharacter.jump();
+			mCharacter->jump();
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Down))
 		{
-			mCharacter.squat();
+			mCharacter->squat();
 		}
 	}
 	// trigger props-cast event
@@ -77,18 +77,18 @@ void Game::pressInput()
 void Game::releaseInput()
 {
 	// set Character status as IDLE
-	mCharacter.idle();
+	mCharacter->idle();
 }
 
 void Game::checkCollision()
 {
-	vector<Obstacle> aliveObstacle;
+	vector<Obstacle*> aliveObstacle;
 
-	for (Obstacle obstacle : mObstacle)
+	for (Obstacle* obstacle : mObstacle)
 	{
-		if(mCharacter.collide(obstacle.getSprite()))
+		if(mCharacter->collide(obstacle->getSprite()))
 		{
-			mCharacter.hit();
+			mCharacter->hit();
 		}
 		else
 		{
@@ -106,15 +106,21 @@ void Game::update()
 
 void Game::render()
 {
-	window.clear();
+	window.clear(Color(0,0,0,0));
 
 	// get objects to display
 
-	// draw objects
-	for (Obstacle obstacle : mObstacle)
+
+	// draw Character
+	// window.draw(mCharacter->getSprite());
+
+	// draw Obstacles
+	/*
+	for (Obstacle* obstacle : mObstacle)
 	{
-		// window.draw(obstacle.getSprite());
+		window.draw(obstacle->getSprite());
 	}
+	*/
 	
 	window.display();
 }

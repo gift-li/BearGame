@@ -5,6 +5,11 @@
 using namespace sf;
 using namespace std;
 
+struct Character_texture
+{
+	Texture bear;
+};
+
 class Character
 {
 public:
@@ -32,17 +37,15 @@ public:
 	void idle();
 	// get current status
 	Status getStatus();
+
+	Sprite getSprite();
 private:
 	bool loadTexture(Type);
 	void setTexture(Type);
+	void reduceHP();
 
 	Sprite character;
-	custom_texture texture;
-	int hp;
+	Character_texture texture;
+	int HP;
 	Status status;
-};
-
-struct custom_texture
-{
-	Texture bear;
 };
