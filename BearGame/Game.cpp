@@ -8,7 +8,7 @@ using namespace std;
 Game::Game()
 {
 	// Game class constructor
-	window.create(VideoMode(1440, 720), "Bear Game");
+	window.create(VideoMode(1440, 540), "Bear Game");
 	mCharacter = new Character(Character::Bear);
 }
 
@@ -106,13 +106,18 @@ void Game::update()
 
 void Game::render()
 {
-	window.clear(Color(0,0,0,0));
+	window.clear(Color::White);
 
 	// get objects to display
 
+	// Draw the line
+	RectangleShape line(Vector2f(window.getSize().x, 2));
+	line.setFillColor(Color::Black);
+	line.setPosition(0, 390);
+	window.draw(line);
 
 	// draw Character
-	// window.draw(mCharacter->getSprite());
+	window.draw(mCharacter->getSprite());
 
 	// draw Obstacles
 	/*
