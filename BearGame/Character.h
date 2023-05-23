@@ -39,9 +39,12 @@ public:
 	Status getStatus();
 
 	Sprite getSprite();
+
+	int getHP();
 private:
 	bool loadTexture(Type);
 	void setTexture(Type);
+	void setScale(Type);
 	void reduceHP();
 
 	Sprite character;

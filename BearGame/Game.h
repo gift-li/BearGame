@@ -19,19 +19,29 @@ public:
 	void checkCollision();
 	void update();
 	void render();
-
-	void setCharacter();
-	// void deleteCharacter();
-
-	void addObstacle();
-	void deleteObstacle();
 private:
 	void pressInput();
-	void releaseInput();
+
+	// can generate Obstacle when equals 0
+	int genCD = 0;
+	// with (1/genProb) chance to generate Obstacle
+	int genProb = 10;
+	// dice to generate Obstacle
+	void generateObstacle();
+	// update each Obstacle's position in mObstacle
+	void updateObstacle();
+
+	void updateHPcounter();
 
 	RenderWindow window;
 	Clock clock;
+	// loop timer
+	float timer = 0;
+	// variant to control fps
+	float delay = 0.2;
 
 	Character* mCharacter;
 	vector<Obstacle *> mObstacle;
+
+	Text HPcounter;
 };

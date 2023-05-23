@@ -7,19 +7,29 @@ using namespace std;
 
 Game::Game()
 {
-	// Game class constructor
 	window.create(VideoMode(1440, 540), "Bear Game");
+
 	mCharacter = new Character(Character::Bear);
+
+	/*
+	Font font;
+	if (font.loadFromFile("font/ProbetaLightitalic-RpoaW.otf"))
+	{
+		// fail loading
+		HPcounter.setFont(font);
+	}
+	HPcounter.setPosition(720, 270);
+	HPcounter.setFillColor(Color::Red);
+	HPcounter.setCharacterSize(30);
+	*/
 }
 
 void Game::run()
 {
-	int time = 0;
-	int last_time = 0;
-
 	while (window.isOpen()) {
-		last_time = time;
-		time = clock.getElapsedTime().asSeconds();
+		float time = clock.getElapsedTime().asSeconds();
+		clock.restart();
+		timer += time;
 
 		watchEvent();
 
@@ -40,9 +50,6 @@ void Game::watchEvent()
 		{
 		case Event::KeyPressed:
 			pressInput();
-			break;
-		case Event::KeyReleased:
-			releaseInput();
 			break;
 		case Event::Closed:
 			window.close();
@@ -74,12 +81,6 @@ void Game::pressInput()
 	}
 }
 
-void Game::releaseInput()
-{
-	// set Character status as IDLE
-	mCharacter->idle();
-}
-
 void Game::checkCollision()
 {
 	vector<Obstacle*> aliveObstacle;
@@ -102,6 +103,58 @@ void Game::checkCollision()
 void Game::update()
 {
 	// update objects status
+	if (timer > delay)
+	{
+		if (genCD > 0)
+		{
+			genCD--;
+		}
+		else if (genCD == 0)
+		{
+			generateObstacle();
+		}
+
+		updateObstacle();
+
+		updateHPcounter();
+
+		timer = 0;
+	}
+}
+
+void Game::generateObstacle()
+{
+	const bool pass = (rand() % genProb <= 1);
+	if (pass)
+	{
+		Obstacle* newObs = new Obstacle(window.getSize().x);
+		genCD = newObs->getGenCD();
+
+		mObstacle.push_back(newObs);
+	}
+}
+
+void Game::updateObstacle()
+{
+	vector<Obstacle*> aliveObstacle;
+
+	for (auto& obstacle : mObstacle)
+	{
+		obstacle->move();
+
+		if (obstacle->getSprite().getPosition().x >= 0)
+		{
+			aliveObstacle.push_back(obstacle);
+		}
+	}
+
+	mObstacle = aliveObstacle;
+}
+
+void Game::updateHPcounter()
+{
+	// const int HP = mCharacter->getHP();
+	HPcounter.setString("3");
 }
 
 void Game::render()
@@ -120,12 +173,13 @@ void Game::render()
 	window.draw(mCharacter->getSprite());
 
 	// draw Obstacles
-	/*
 	for (Obstacle* obstacle : mObstacle)
 	{
 		window.draw(obstacle->getSprite());
 	}
-	*/
+
+	// draw HPcounter
+	// window.draw(HPcounter);
 	
 	window.display();
 }

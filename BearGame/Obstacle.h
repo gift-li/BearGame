@@ -9,9 +9,9 @@ struct Obstacle_texture
 {
 	Texture tree;
 	Texture eagle;
-	Texture giant_potion;
-	Texture magic_herb;
-	Texture invincible_honey;
+	Texture potion;
+	Texture herb;
+	Texture honey;
 };
 
 class Obstacle
@@ -19,29 +19,32 @@ class Obstacle
 public:
 	enum Type
 	{
+		/*
 		TREE,
 		EAGLE,
 		GIANT_POTION,
-		MAGIC_HERB,
-		INVINCIBLE_HONEY,
+		*/
+		HERB,
+		HONEY,
 
 		// Don't remove: add enum entity above
 		LAST
 	};
 
-	Obstacle();
+	Obstacle(unsigned int);
 
-	// generate Obstacle randomly
-	Sprite generate();
-	// generate Obstacle with required props
-	Sprite generate(Type);
 	// get drawable Sprite
 	Sprite getSprite();
+
+	int getGenCD();
+	// move
+	void move();
 private:
-	bool loadTexture();
+	bool loadTexture(Type);
 	void setTexture(Type);
 	void setScale(Type);
 
 	Sprite obstacle;
 	Obstacle_texture texture;
+	float speedx;
 };

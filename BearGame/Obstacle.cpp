@@ -6,38 +6,28 @@
 using namespace sf;
 using namespace std;
 
-Obstacle::Obstacle()
+Obstacle::Obstacle(unsigned int window_width)
 {
-	if (!loadTexture())
-	{
-		cout << "Load texture success" << endl;
-	}
-
 	srand((unsigned)time(NULL));
-}
-
-Sprite Obstacle::generate()
-{
-	// random generate obstacle
 	Type rand_type = Type(rand() % Obstacle::LAST);
 
-	generate(rand_type);
+	if (loadTexture(rand_type))
+	{
+		// random generate obstacle
+		setTexture(rand_type);
+		setScale(rand_type);
+		speedx = rand() % 10 + 10;
+		obstacle.setPosition(Vector2f(window_width, rand() % 230));
 
-	return obstacle;
-}
-
-Sprite Obstacle::generate(Type type)
-{
-	setScale(type);
-	setTexture(type);
-
-	return obstacle;
+		cout << "Build Obstacle success" << endl;
+	}
 }
 
 void Obstacle::setTexture(Type type)
 {
 	switch (type)
 	{
+		/*
 	case Obstacle::TREE:
 		obstacle.setTexture(texture.eagle);
 		break;
@@ -45,13 +35,14 @@ void Obstacle::setTexture(Type type)
 		obstacle.setTexture(texture.tree);
 		break;
 	case Obstacle::GIANT_POTION:
-		obstacle.setTexture(texture.giant_potion);
+		obstacle.setTexture(texture.potion);
 		break;
-	case Obstacle::MAGIC_HERB:
-		obstacle.setTexture(texture.magic_herb);
+		*/
+	case Obstacle::HERB:
+		obstacle.setTexture(texture.herb);
 		break;
-	case Obstacle::INVINCIBLE_HONEY:
-		obstacle.setTexture(texture.invincible_honey);
+	case Obstacle::HONEY:
+		obstacle.setTexture(texture.honey);
 		break;
 	default:
 		cout << "Invalid obstacle setTexture" << endl;
@@ -63,20 +54,22 @@ void Obstacle::setScale(Type type)
 {
 	switch (type)
 	{
+		/*
 	case Obstacle::TREE:
 		obstacle.setScale(1.f, 1.f);
 		break;
 	case Obstacle::EAGLE:
 		obstacle.setScale(1.f, 1.f);
 		break;
-	case Obstacle::GIANT_POTION:
+	case Obstacle::POTION:
 		obstacle.setScale(1.f, 1.f);
 		break;
-	case Obstacle::MAGIC_HERB:
-		obstacle.setScale(1.f, 1.f);
+		*/
+	case Obstacle::HERB:
+		obstacle.setScale(.3f, .3f);
 		break;
-	case Obstacle::INVINCIBLE_HONEY:
-		obstacle.setScale(1.f, 1.f);
+	case Obstacle::HONEY:
+		obstacle.setScale(.3f, .3f);
 		break;
 	default:
 		cout << "Invalid obstacle setScale" << endl;
@@ -84,23 +77,39 @@ void Obstacle::setScale(Type type)
 	}
 }
 
-Sprite Obstacle::getSprite()
+void Obstacle::move()
 {
-	return obstacle;
+	obstacle.move(Vector2f(-speedx, 0));
 }
 
-bool Obstacle::loadTexture()
+Sprite Obstacle::getSprite()
 {
+	return this->obstacle;
+}
+
+int Obstacle::getGenCD()
+{
+	return obstacle.getGlobalBounds().width / speedx + 1;
+}
+
+bool Obstacle::loadTexture(Type type)
+{
+	/*
 	if (!texture.tree.loadFromFile("tree.jpg"))
 		return EXIT_FAILURE;
 	if (!texture.eagle.loadFromFile("eagle.jpg"))
 		return EXIT_FAILURE;
 	if (!texture.giant_potion.loadFromFile("giant_potion.jpg"))
 		return EXIT_FAILURE;
-	if (!texture.magic_herb.loadFromFile("magic_herb.jpg"))
-		return EXIT_FAILURE;
-	if (!texture.invincible_honey.loadFromFile("invincible_honey.jpg"))
-		return EXIT_FAILURE;
-
-	return EXIT_SUCCESS;
+	*/
+	switch (type)
+	{
+	case Obstacle::HERB:
+		return texture.herb.loadFromFile("image/herb.png");
+	case Obstacle::HONEY:
+		return texture.honey.loadFromFile("image/honey.png");
+	default:
+		cout << "Invalid Obstacle loadTexture" << endl;
+		return false;
+	}
 }
