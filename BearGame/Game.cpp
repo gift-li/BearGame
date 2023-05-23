@@ -113,7 +113,7 @@ void Game::render()
 	// Draw the line
 	RectangleShape line(Vector2f(window.getSize().x, 2));
 	line.setFillColor(Color::Black);
-	line.setPosition(0, 390);
+	line.setPosition(0, 450);
 	window.draw(line);
 
 	// draw Character
