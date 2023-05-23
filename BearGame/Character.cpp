@@ -10,16 +10,15 @@ Character::Character(Type type)
 	if (loadTexture(type))
 	{
 		setTexture(type);
-		setScale(type);
-		character.setPosition(sf::Vector2f(120.f, 270.f));
-		this->HP = 3;
-		cout << "Init character success" << endl;
+		cout << "Load character texture success" << endl;
 	}
 }
 
 bool Character::collide(Sprite obstacle)
 {
-	return character.getGlobalBounds().intersects(obstacle.getGlobalBounds());
+	return (character.getGlobalBounds().intersects(obstacle.getGlobalBounds()))
+		? true
+		: false;
 }
 
 void Character::hit()
@@ -96,17 +95,14 @@ Sprite Character::getSprite()
 	return this->character;
 }
 
-int Character::getHP()
-{
-	return this->HP;
-}
-
 bool Character::loadTexture(Type type)
 {
 	switch (type)
 	{
 	case Character::Bear:
-		return texture.bear.loadFromFile("image/bear_jump.png");
+		return (!texture.bear.loadFromFile("Image/bear_jump.png"))
+			? false
+			: true;
 	default:
 		cout << "Invalid Character loadTexture" << endl;
 		return false;
@@ -119,22 +115,11 @@ void Character::setTexture(Type type)
 	{
 	case Character::Bear:
 		character.setTexture(texture.bear);
+		character.setScale(0.3f, 0.3f);
+		character.setPosition(sf::Vector2f(120.f, 270.f));
 		break;
 	default:
 		cout << "Invalid Character setTexture" << endl;
-		break;
-	}
-}
-
-void Character::setScale(Type type)
-{
-	switch (type)
-	{
-	case Character::Bear:
-		character.setScale(0.3f, 0.3f);
-		break;
-	default:
-		cout << "Invalid Character setScale" << endl;
 		break;
 	}
 }
