@@ -20,8 +20,26 @@ public:
 	void update();
 	void render();
 private:
-	void pressInput();
+	RenderWindow window;
+	Clock clock;
+	// loop timer
+	float timer = 0;
+	// variant to control fps
+	float delay = 0.2;
+	// score to show
+	int score = 0;
 
+	// status showing game is continue
+	bool gameOn = true;
+
+	Character* mCharacter;
+	vector<Obstacle*> mObstacle;
+
+	Font font;
+	Text textHP;
+	Text textScore;
+
+	void pressInput();
 	// can generate Obstacle when equals 0
 	int genCD = 0;
 	// with (1/genProb) chance to generate Obstacle
@@ -31,17 +49,7 @@ private:
 	// update each Obstacle's position in mObstacle
 	void updateObstacle();
 
-	void updateHPcounter();
-
-	RenderWindow window;
-	Clock clock;
-	// loop timer
-	float timer = 0;
-	// variant to control fps
-	float delay = 0.2;
-
-	Character* mCharacter;
-	vector<Obstacle *> mObstacle;
-
-	Text HPcounter;
+	void initText();
+	void updateTextHP();
+	void updateTextScore();
 };

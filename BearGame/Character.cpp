@@ -12,6 +12,8 @@ Character::Character(Type type)
 		setTexture(type);
 		cout << "Load character texture success" << endl;
 	}
+	
+	HP = 3;
 }
 
 bool Character::collide(Sprite obstacle)
@@ -93,6 +95,11 @@ Character::Status Character::getStatus()
 Sprite Character::getSprite()
 {
 	return this->character;
+}
+
+int Character::getHP()
+{
+	return this->HP;
 }
 
 bool Character::loadTexture(Type type)

@@ -18,8 +18,6 @@ Obstacle::Obstacle(unsigned int window_width)
 		setScale(rand_type);
 		speedx = rand() % 10 + 10;
 		obstacle.setPosition(Vector2f(window_width, rand() % 230));
-
-		cout << "Build Obstacle success" << endl;
 	}
 }
 

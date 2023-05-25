@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "Game.h"
 #include "Character.h"
 
@@ -7,29 +8,25 @@ using namespace std;
 
 Game::Game()
 {
-	window.create(VideoMode(1440, 540), "Bear Game");
-
-	mCharacter = new Character(Character::Bear);
-
-	/*
-	Font font;
-	if (font.loadFromFile("font/ProbetaLightitalic-RpoaW.otf"))
+	if (!font.loadFromFile("font/PIXEAB__.TTF"))
 	{
 		// fail loading
-		HPcounter.setFont(font);
+		cout << "Fail loading font" << endl;
 	}
-	HPcounter.setPosition(720, 270);
-	HPcounter.setFillColor(Color::Red);
-	HPcounter.setCharacterSize(30);
-	*/
+	window.create(VideoMode(1440, 540), "Bear Game");
+	mCharacter = new Character(Character::Bear);
+	initText();
 }
 
 void Game::run()
 {
 	while (window.isOpen()) {
-		float time = clock.getElapsedTime().asSeconds();
-		clock.restart();
-		timer += time;
+		if (gameOn)
+		{
+			float time = clock.getElapsedTime().asSeconds();
+			clock.restart();
+			timer += time;
+		}
 
 		watchEvent();
 
@@ -103,7 +100,7 @@ void Game::checkCollision()
 void Game::update()
 {
 	// update objects status
-	if (timer > delay)
+	if (timer > delay && gameOn)
 	{
 		if (genCD > 0)
 		{
@@ -116,7 +113,8 @@ void Game::update()
 
 		updateObstacle();
 
-		updateHPcounter();
+		updateTextHP();
+		// updateTextScore();
 
 		timer = 0;
 	}
@@ -151,10 +149,46 @@ void Game::updateObstacle()
 	mObstacle = aliveObstacle;
 }
 
-void Game::updateHPcounter()
+void Game::initText()
 {
-	// const int HP = mCharacter->getHP();
-	HPcounter.setString("3");
+	Text _textHP;
+	// setting
+	_textHP.setPosition(window.getSize().x/2, 0);
+	_textHP.setFont(font);
+	_textHP.setCharacterSize(40);
+	_textHP.setFillColor(Color::Red);
+	// assign
+	textHP = _textHP;
+
+	Text _textScore;
+	// setting
+	_textScore.setPosition(window.getSize().x * 0.8, 0);
+	_textScore.setFont(font);
+	_textScore.setCharacterSize(40);
+	_textScore.setFillColor(Color::Black);
+	// assign
+	textScore = _textScore;
+}
+
+void Game::updateTextHP()
+{
+	const int HP = mCharacter->getHP();
+	if (HP > 0)
+	{
+		textHP.setString(to_string(HP));
+	}
+	else
+	{
+		textHP.setString("You lose!");
+		const float x = (window.getSize().x - textHP.getLocalBounds().width) / 2;
+		textHP.setPosition(x, 0);
+		gameOn = false;
+	}
+}
+
+void Game::updateTextScore()
+{
+
 }
 
 void Game::render()
@@ -178,8 +212,9 @@ void Game::render()
 		window.draw(obstacle->getSprite());
 	}
 
-	// draw HPcounter
-	// window.draw(HPcounter);
+	// draw textHP
+	window.draw(textHP);
+	// window.draw(textScore);
 	
 	window.display();
 }
