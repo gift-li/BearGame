@@ -78,6 +78,14 @@ void Game::pressInput()
 	}
 }
 
+void Game::updateCharacter()
+{
+	if (mCharacter->getStatus() != Character::IDLE)
+	{
+		mCharacter->move();
+	}
+}
+
 void Game::checkCollision()
 {
 	vector<Obstacle*> aliveObstacle;
@@ -110,6 +118,8 @@ void Game::update()
 		{
 			generateObstacle();
 		}
+
+		updateCharacter();
 
 		updateObstacle();
 
@@ -200,7 +210,7 @@ void Game::render()
 	// Draw the line
 	RectangleShape line(Vector2f(window.getSize().x, 2));
 	line.setFillColor(Color::Black);
-	line.setPosition(0, 450);
+	line.setPosition(0, 435);
 	window.draw(line);
 
 	// draw Character

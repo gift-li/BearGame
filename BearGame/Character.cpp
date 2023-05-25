@@ -34,46 +34,22 @@ void Character::hit()
 void Character::jump()
 {
 	status = Character::JUMP;
-
-	const float jumpHeight = 150.0f; // Height at which the character jumps
-	const float jumpSpeed = 5.0f;    // Speed at which the character jumps
-	const float gravity = 9.8f;      // Acceleration due to gravity
-
-	Vector2f position = character.getPosition();
-	float initialVelocity = sqrt(2 * gravity * jumpHeight);
-
-	while (position.y >= 150.0f)
-	{
-		// Move character upwards
-		position.y -= jumpSpeed;
-		character.setPosition(position);
-
-		// Calculate new velocity based on gravity
-		initialVelocity -= gravity;
-
-		// Delay to control the jump speed
-		sf::sleep(sf::milliseconds(10));
-	}
-
-	while (position.y < 270.0f)
-	{
-		// Move character downwards
-		position.y += jumpSpeed;
-		character.setPosition(position);
-
-		// Calculate new velocity based on gravity
-		initialVelocity += gravity;
-
-		// Delay to control the jump speed
-		sf::sleep(sf::milliseconds(10));
-	}
-
-	// Set character position to ground level
-	character.setPosition(position.x, 270.0f);
-
-	status = Character::IDLE;
+	this->jumpHeight = 150.f;
+	this->jumpSpeed = 60.f;
+	this->g = 10.f;
 }
 
+void Character::move()
+{
+	character.move(Vector2f(0,-jumpSpeed));
+	jumpSpeed = jumpSpeed - g;
+	Vector2f position = character.getPosition();
+	if (position.y >= 330.0f)
+	{
+		//character.setPosition(Vector2f(120.f, 330.f));
+		status = Character::IDLE;
+	}
+}
 
 void Character::squat()
 {
@@ -123,7 +99,7 @@ void Character::setTexture(Type type)
 	case Character::Bear:
 		character.setTexture(texture.bear);
 		character.setScale(0.3f, 0.3f);
-		character.setPosition(sf::Vector2f(120.f, 270.f));
+		character.setPosition(sf::Vector2f(120.f, 330.f));
 		break;
 	default:
 		cout << "Invalid Character setTexture" << endl;

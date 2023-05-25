@@ -36,6 +36,8 @@ public:
 	// action method: idle
 	void idle();
 	// get current status
+	void move();
+	// keep moving
 	Status getStatus();
 
 	Sprite getSprite();
@@ -50,5 +52,9 @@ private:
 	Sprite character;
 	Character_texture texture;
 	int HP;
-	Status status;
+	Status status = Character::IDLE;
+
+	float jumpHeight;
+	float jumpSpeed;
+	float g;
 };

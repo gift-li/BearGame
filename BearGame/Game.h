@@ -25,7 +25,7 @@ private:
 	// loop timer
 	float timer = 0;
 	// variant to control fps
-	float delay = 0.2;
+	float delay = 0.05;
 	// score to show
 	int score = 0;
 
@@ -44,6 +44,8 @@ private:
 	int genCD = 0;
 	// with (1/genProb) chance to generate Obstacle
 	int genProb = 10;
+	// update mCharacter
+	void updateCharacter();
 	// dice to generate Obstacle
 	void generateObstacle();
 	// update each Obstacle's position in mObstacle
