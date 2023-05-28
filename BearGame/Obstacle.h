@@ -19,11 +19,9 @@ class Obstacle
 public:
 	enum Type
 	{
-		/*
 		TREE,
 		EAGLE,
-		GIANT_POTION,
-		*/
+		POTION,
 		HERB,
 		HONEY,
 
@@ -36,15 +34,17 @@ public:
 	// get drawable Sprite
 	Sprite getSprite();
 
+	int getDamage();
+
 	int getGenCD();
 	// move
 	void move();
 private:
 	bool loadTexture(Type);
-	void setTexture(Type);
-	void setScale(Type);
+	void setAttribute(Type);
 
 	Sprite obstacle;
 	Obstacle_texture texture;
 	float speedx;
+	int damage;
 };

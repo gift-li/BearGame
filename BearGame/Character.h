@@ -25,10 +25,9 @@ public:
 	};
 	Character(Type);
 
+	void reset();
 	// check method: whether collide with input
 	bool collide(Sprite);
-	// trigger event: when collide success
-	void hit();
 	// action method: jump
 	void jump();
 	// action method: squat
@@ -43,11 +42,10 @@ public:
 	Sprite getSprite();
 
 	int getHP();
+	void changeHP(int);
 private:
 	bool loadTexture(Type);
 	void setTexture(Type);
-	void setScale(Type);
-	void reduceHP();
 
 	Sprite character;
 	Character_texture texture;

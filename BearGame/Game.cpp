@@ -21,20 +21,22 @@ Game::Game()
 void Game::run()
 {
 	while (window.isOpen()) {
+		float time = clock.getElapsedTime().asSeconds();
+		clock.restart();
+		timer += time;
+
 		if (gameOn)
 		{
-			float time = clock.getElapsedTime().asSeconds();
-			clock.restart();
-			timer += time;
+
+			watchEvent();
+			checkCollision();
+			update();
+			render();
 		}
-
-		watchEvent();
-
-		checkCollision();
-
-		update();
-
-		render();
+		else
+		{
+			watchEvent();
+		}
 	}
 }
 
@@ -76,6 +78,10 @@ void Game::pressInput()
 	{
 		// do something
 	}
+	else if (Keyboard::isKeyPressed(Keyboard::R))
+	{
+		restart();
+	}
 }
 
 void Game::updateCharacter()
@@ -94,7 +100,7 @@ void Game::checkCollision()
 	{
 		if(mCharacter->collide(obstacle->getSprite()))
 		{
-			mCharacter->hit();
+			mCharacter->changeHP(obstacle->getDamage());
 		}
 		else
 		{
@@ -124,7 +130,7 @@ void Game::update()
 		updateObstacle();
 
 		updateTextHP();
-		// updateTextScore();
+		updateTextScore();
 
 		timer = 0;
 	}
@@ -163,9 +169,9 @@ void Game::initText()
 {
 	Text _textHP;
 	// setting
-	_textHP.setPosition(window.getSize().x/2, 0);
+	_textHP.setPosition(window.getSize().x / 2, 0);
 	_textHP.setFont(font);
-	_textHP.setCharacterSize(40);
+	_textHP.setCharacterSize(30);
 	_textHP.setFillColor(Color::Red);
 	// assign
 	textHP = _textHP;
@@ -174,7 +180,7 @@ void Game::initText()
 	// setting
 	_textScore.setPosition(window.getSize().x * 0.8, 0);
 	_textScore.setFont(font);
-	_textScore.setCharacterSize(40);
+	_textScore.setCharacterSize(30);
 	_textScore.setFillColor(Color::Black);
 	// assign
 	textScore = _textScore;
@@ -189,7 +195,7 @@ void Game::updateTextHP()
 	}
 	else
 	{
-		textHP.setString("You lose!");
+		textHP.setString("You lose!\nPress R to restart!");
 		const float x = (window.getSize().x - textHP.getLocalBounds().width) / 2;
 		textHP.setPosition(x, 0);
 		gameOn = false;
@@ -198,14 +204,12 @@ void Game::updateTextHP()
 
 void Game::updateTextScore()
 {
-
+	textScore.setString(to_string(score));
 }
 
 void Game::render()
 {
 	window.clear(Color::White);
-
-	// get objects to display
 
 	// Draw the line
 	RectangleShape line(Vector2f(window.getSize().x, 2));
@@ -222,9 +226,26 @@ void Game::render()
 		window.draw(obstacle->getSprite());
 	}
 
-	// draw textHP
+	// draw text
 	window.draw(textHP);
-	// window.draw(textScore);
+	window.draw(textScore);
 	
 	window.display();
+}
+
+void Game::restart()
+{
+	mCharacter->reset();
+	mObstacle.clear();
+
+	this->genCD = 0;
+	this->score = 0;
+
+	const float x = (window.getSize().x) / 2;
+	this->textHP.setString(to_string(mCharacter->getHP()));
+	this->textHP.setPosition(x, 0);
+
+	this->textScore.setString(to_string(this->score));
+
+	this->gameOn = true;
 }

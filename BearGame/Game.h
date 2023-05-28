@@ -20,6 +20,7 @@ public:
 	void update();
 	void render();
 private:
+	void restart();
 	RenderWindow window;
 	Clock clock;
 	// loop timer

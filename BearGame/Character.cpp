@@ -16,19 +16,18 @@ Character::Character(Type type)
 	HP = 3;
 }
 
-bool Character::collide(Sprite obstacle)
+void Character::reset()
 {
-	return (character.getGlobalBounds().intersects(obstacle.getGlobalBounds()))
-		? true
-		: false;
+	this->HP = 3;
+	this->jumpHeight = 0;
+	this->jumpSpeed = 0;
+	this->g = 0;
+	character.setPosition(sf::Vector2f(120.f, 330.f));
 }
 
-void Character::hit()
+bool Character::collide(Sprite obstacle)
 {
-	if (this->HP >= 0)
-	{
-		this->reduceHP();
-	}
+	return character.getGlobalBounds().intersects(obstacle.getGlobalBounds());
 }
 
 void Character::jump()
@@ -58,34 +57,22 @@ void Character::squat()
 	// character.move(Vector2f());
 }
 
-void Character::idle()
-{
-	status = Character::IDLE;
-}
+void Character::idle(){status = Character::IDLE;}
 
-Character::Status Character::getStatus()
-{
-	return this->status;
-}
+Character::Status Character::getStatus(){return this->status;}
 
-Sprite Character::getSprite()
-{
-	return this->character;
-}
+Sprite Character::getSprite(){return this->character;}
 
-int Character::getHP()
-{
-	return this->HP;
-}
+int Character::getHP(){return this->HP;}
+
+void Character::changeHP(int offset) { this->HP -= offset; }
 
 bool Character::loadTexture(Type type)
 {
 	switch (type)
 	{
 	case Character::Bear:
-		return (!texture.bear.loadFromFile("Image/bear_jump.png"))
-			? false
-			: true;
+		return texture.bear.loadFromFile("Image/bear_jump.png");
 	default:
 		cout << "Invalid Character loadTexture" << endl;
 		return false;
@@ -105,9 +92,4 @@ void Character::setTexture(Type type)
 		cout << "Invalid Character setTexture" << endl;
 		break;
 	}
-}
-
-void Character::reduceHP()
-{
-	this->HP--;
 }
