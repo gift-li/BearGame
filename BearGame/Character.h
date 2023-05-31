@@ -57,5 +57,7 @@ private:
 	float jumpHeight;
 	float jumpSpeed;
 	float g;
-	float cd = 10;
+	float cd = 5;
+
+	bool idleSwitch = true;
 };

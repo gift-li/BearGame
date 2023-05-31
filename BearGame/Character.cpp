@@ -38,18 +38,19 @@ void Character::idle()
 void Character::idleMove()
 {
 	cd--;
-	printf("cd = %f\n", cd);
 	if (cd == 0)
 	{
-		if (texture.bear.loadFromFile("Image/bear_idle1.png"))
+		if (idleSwitch)
 		{
 			texture.bear.loadFromFile("Image/bear_idle2.png");
+			idleSwitch = false;
 		}
-		else (texture.bear.loadFromFile("Image/bear_idle2.png"))
+		else 
 		{
 			texture.bear.loadFromFile("Image/bear_idle1.png");
+			idleSwitch = true;
 		}
-		cd = 10;
+		cd = 5;
 	}
 }
 
