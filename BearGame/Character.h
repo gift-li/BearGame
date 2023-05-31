@@ -8,6 +8,8 @@ using namespace std;
 struct Character_texture
 {
 	Texture bear;
+	Texture jump;
+	Texture squat;
 };
 
 class Character
@@ -34,8 +36,8 @@ public:
 	void squat();
 	// action method: idle
 	void idle();
-	// keep moving
-	void move();
+
+	void jumpMove();
 
 	Status getStatus() { return this->status; };
 	Sprite getSprite() { return this->character; };

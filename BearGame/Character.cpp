@@ -38,15 +38,16 @@ void Character::jump()
 	this->g = 10.f;
 }
 
-void Character::move()
+void Character::jumpMove()
 {
+	texture.bear.loadFromFile("Image/bear_jump.png");
 	character.move(Vector2f(0,-jumpSpeed));
 	jumpSpeed = jumpSpeed - g;
 	Vector2f position = character.getPosition();
 	if (position.y >= 330.0f)
 	{
-		//character.setPosition(Vector2f(120.f, 330.f));
 		status = Character::IDLE;
+		texture.bear.loadFromFile("Image/bear_idle1.png");
 	}
 }
 
@@ -62,7 +63,7 @@ bool Character::loadTexture(Type type)
 	switch (type)
 	{
 	case Character::Bear:
-		return texture.bear.loadFromFile("Image/bear_jump.png");
+		return texture.bear.loadFromFile("Image/bear_idle1.png");
 	default:
 		cout << "Invalid Character loadTexture" << endl;
 		return false;
