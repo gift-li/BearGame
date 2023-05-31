@@ -60,13 +60,15 @@ void Game::pressInput()
 	// trigger event when status is IDLE
 	if (mCharacter->getStatus() == Character::IDLE)
 	{
+		mCharacter->idle();
+
 		if (Keyboard::isKeyPressed(Keyboard::Up))
 		{
 			mCharacter->jump();
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Down))
 		{
-			//mCharacter->squat();
+			mCharacter->squat();
 		}
 	}
 	// trigger props-cast event
@@ -82,9 +84,17 @@ void Game::pressInput()
 
 void Game::updateCharacter()
 {
-	if (mCharacter->getStatus() != Character::IDLE)
+	if (mCharacter->getStatus() == Character::IDLE)
+	{
+		mCharacter->idleMove();
+	}
+	else if (mCharacter->getStatus() == Character::JUMP)
 	{
 		mCharacter->jumpMove();
+	}
+	else if (mCharacter->getStatus() == Character::SQUAT)
+	{
+		mCharacter->squatMove();
 	}
 }
 

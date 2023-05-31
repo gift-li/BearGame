@@ -30,6 +30,29 @@ bool Character::collide(Sprite obstacle)
 	return character.getGlobalBounds().intersects(obstacle.getGlobalBounds());
 }
 
+void Character::idle()
+{
+	status = Character::IDLE;
+}
+
+void Character::idleMove()
+{
+	cd--;
+	printf("cd = %f\n", cd);
+	if (cd == 0)
+	{
+		if (texture.bear.loadFromFile("Image/bear_idle1.png"))
+		{
+			texture.bear.loadFromFile("Image/bear_idle2.png");
+		}
+		else (texture.bear.loadFromFile("Image/bear_idle2.png"))
+		{
+			texture.bear.loadFromFile("Image/bear_idle1.png");
+		}
+		cd = 10;
+	}
+}
+
 void Character::jump()
 {
 	status = Character::JUMP;
@@ -54,8 +77,14 @@ void Character::jumpMove()
 void Character::squat()
 {
 	status = Character::SQUAT;
+	character.setPosition(sf::Vector2f(120.f, 330.f));
 	// move Character Y-axis
 	// character.move(Vector2f());
+}
+
+void Character::squatMove()
+{
+	texture.bear.loadFromFile("Image/bear_squat.png");
 }
 
 bool Character::loadTexture(Type type)

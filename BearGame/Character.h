@@ -37,7 +37,9 @@ public:
 	// action method: idle
 	void idle();
 
+	void idleMove();
 	void jumpMove();
+	void squatMove();
 
 	Status getStatus() { return this->status; };
 	Sprite getSprite() { return this->character; };
@@ -55,4 +57,5 @@ private:
 	float jumpHeight;
 	float jumpSpeed;
 	float g;
+	float cd = 10;
 };
