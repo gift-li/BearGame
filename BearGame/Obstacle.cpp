@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include "Obstacle.h"
+#include "Game.h"
 
 using namespace sf;
 using namespace std;
@@ -14,6 +15,7 @@ Obstacle::Obstacle(unsigned int window_width)
 	if (loadTexture(rand_type))
 	{
 		// random generate obstacle
+		this->type = rand_type;
 		setAttribute(rand_type);
 		speedx = rand() % 15 + 20;
 		obstacle.setPosition(
@@ -40,6 +42,7 @@ void Obstacle::setAttribute(Type type)
 		obstacle.setTexture(texture.potion);
 		obstacle.setScale(.25f, .25f);
 		this->damage = 0;
+		this->interval = 3000;
 		break;
 	case Obstacle::HERB:
 		obstacle.setTexture(texture.herb);
@@ -50,6 +53,7 @@ void Obstacle::setAttribute(Type type)
 		obstacle.setTexture(texture.honey);
 		obstacle.setScale(.25f, .25f);
 		this->damage = 0;
+		// this->interval = 5;
 		break;
 	default:
 		cout << "Invalid obstacle setAttribute" << endl;
@@ -62,13 +66,46 @@ void Obstacle::move()
 	obstacle.move(Vector2f(-speedx, 0));
 }
 
-Sprite Obstacle::getSprite(){return this->obstacle;}
-
-int Obstacle::getDamage() { return this->damage; }
-
-int Obstacle::getGenCD()
+void Obstacle::perform()
 {
-	return obstacle.getGlobalBounds().width / speedx + 1;
+	switch (this->type)
+	{
+	case Obstacle::POTION:
+		usePotion();
+	case Obstacle::HERB:
+		useHerb();
+	case Obstacle::HONEY:
+		useHoney();
+	default:
+		break;
+	}
+}
+
+void Obstacle::useHerb()
+{
+
+}
+
+void Obstacle::useHoney()
+{
+
+}
+
+void Obstacle::usePotion()
+{
+	/*
+	if (this->interval > 0)
+	{
+		Game::getInstance().getCharacter()->getSprite()
+			.scale(1.f, 4.f);
+		// cout << Game::getInstance().getCharacter()->getSprite().getScale().y << endl;
+	}
+	else {
+		Game::getInstance().getCharacter()->getSprite()
+			.scale(1.f, .25f);
+	}
+	this->interval--;
+	*/
 }
 
 bool Obstacle::loadTexture(Type type)

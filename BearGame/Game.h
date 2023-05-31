@@ -11,15 +11,24 @@ using namespace std;
 class Game
 {
 public:
-	Game();
-
+	static Game& getInstance() {
+		static Game instance;
+		return instance;
+	};
 	void run();
 
+	// watch keyboard event
 	void watchEvent();
 	void checkCollision();
+	// perform obstacle effect
+	void doSchedule();
 	void update();
 	void render();
+
+	Character* getCharacter() { return this->mCharacter; };
+	vector<Obstacle*> getObstacle() { return this->mObstacle; };
 private:
+	Game();
 	void restart();
 	RenderWindow window;
 	Clock clock;
@@ -33,8 +42,12 @@ private:
 	// status showing game is continue
 	bool gameOn = true;
 
+	// current Character
 	Character* mCharacter;
+	// current Obstacles
 	vector<Obstacle*> mObstacle;
+	// perfoming Obstacle
+	Obstacle* scheduleObstacle = nullptr;
 
 	Font font;
 	Text textHP;

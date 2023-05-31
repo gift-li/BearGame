@@ -34,15 +34,13 @@ public:
 	void squat();
 	// action method: idle
 	void idle();
-	// get current status
-	void move();
 	// keep moving
-	Status getStatus();
+	void move();
 
-	Sprite getSprite();
-
-	int getHP();
-	void changeHP(int);
+	Status getStatus() { return this->status; };
+	Sprite getSprite() { return this->character; };
+	int getHP() { return this->HP; };
+	void changeHP(int offset) { this->HP -= offset; };
 private:
 	bool loadTexture(Type);
 	void setTexture(Type);

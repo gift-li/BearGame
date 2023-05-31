@@ -57,16 +57,6 @@ void Character::squat()
 	// character.move(Vector2f());
 }
 
-void Character::idle(){status = Character::IDLE;}
-
-Character::Status Character::getStatus(){return this->status;}
-
-Sprite Character::getSprite(){return this->character;}
-
-int Character::getHP(){return this->HP;}
-
-void Character::changeHP(int offset) { this->HP -= offset; }
-
 bool Character::loadTexture(Type type)
 {
 	switch (type)

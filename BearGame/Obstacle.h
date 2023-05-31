@@ -30,21 +30,30 @@ public:
 	};
 
 	Obstacle(unsigned int);
-
-	// get drawable Sprite
-	Sprite getSprite();
-
-	int getDamage();
-
-	int getGenCD();
 	// move
 	void move();
+	// perform
+	void perform();
+
+
+	// get drawable Sprite
+	Sprite getSprite() { return this->obstacle; };
+	int getDamage() { return this->damage; };
+	int getGenCD() {
+		return this->obstacle.getGlobalBounds().width / speedx + 1;
+	};
+	int getInterval() { return this->interval; };
 private:
 	bool loadTexture(Type);
 	void setAttribute(Type);
+	void usePotion();
+	void useHerb();
+	void useHoney();
 
+	Type type;
 	Sprite obstacle;
 	Obstacle_texture texture;
 	float speedx;
 	int damage;
+	int interval = 0;
 };

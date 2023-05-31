@@ -2,9 +2,7 @@
 
 int main()
 {
-    Game game;
-
-    game.run();
+    Game::getInstance().run();
 
     return EXIT_SUCCESS;
 }

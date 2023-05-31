@@ -25,17 +25,13 @@ void Game::run()
 		clock.restart();
 		timer += time;
 
+		watchEvent();
 		if (gameOn)
 		{
-
-			watchEvent();
 			checkCollision();
+			doSchedule();
 			update();
 			render();
-		}
-		else
-		{
-			watchEvent();
 		}
 	}
 }
@@ -70,7 +66,7 @@ void Game::pressInput()
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Down))
 		{
-			mCharacter->squat();
+			// mCharacter->squat();
 		}
 	}
 	// trigger props-cast event
@@ -95,12 +91,15 @@ void Game::updateCharacter()
 void Game::checkCollision()
 {
 	vector<Obstacle*> aliveObstacle;
-
 	for (Obstacle* obstacle : mObstacle)
 	{
 		if(mCharacter->collide(obstacle->getSprite()))
 		{
 			mCharacter->changeHP(obstacle->getDamage());
+			if (scheduleObstacle == nullptr) {
+				// instantly change to new collide obstacle perform
+				scheduleObstacle = obstacle;
+			}
 		}
 		else
 		{
@@ -109,6 +108,7 @@ void Game::checkCollision()
 	}
 	// update mObstacle to alive obstacle
 	this->mObstacle = aliveObstacle;
+	aliveObstacle.clear();
 }
 
 void Game::update()
@@ -178,7 +178,7 @@ void Game::initText()
 
 	Text _textScore;
 	// setting
-	_textScore.setPosition(window.getSize().x * 0.8, 0);
+	_textScore.setPosition(window.getSize().x * 0.05, 0);
 	_textScore.setFont(font);
 	_textScore.setCharacterSize(30);
 	_textScore.setFillColor(Color::Black);
@@ -205,6 +205,18 @@ void Game::updateTextHP()
 void Game::updateTextScore()
 {
 	textScore.setString(to_string(score));
+}
+
+void Game::doSchedule()
+{
+	if (scheduleObstacle != nullptr)
+	{
+		scheduleObstacle->perform();
+		if (scheduleObstacle->getInterval() == 0)
+		{
+			this->scheduleObstacle = nullptr;
+		}
+	}
 }
 
 void Game::render()
@@ -237,6 +249,7 @@ void Game::restart()
 {
 	mCharacter->reset();
 	mObstacle.clear();
+	scheduleObstacle = nullptr;
 
 	this->genCD = 0;
 	this->score = 0;
