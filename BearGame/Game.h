@@ -54,6 +54,7 @@ private:
 	Text textScore;
 
 	void pressInput();
+	void releaseInput();
 	// can generate Obstacle when equals 0
 	int genCD = 0;
 	// with (1/genProb) chance to generate Obstacle

@@ -39,6 +39,7 @@ public:
 	// get drawable Sprite
 	Sprite getSprite() { return this->obstacle; };
 	int getDamage() { return this->damage; };
+	int getPoint() { return this->point; };
 	int getGenCD() {
 		return this->obstacle.getGlobalBounds().width / speedx + 1;
 	};
@@ -54,6 +55,10 @@ private:
 	Sprite obstacle;
 	Obstacle_texture texture;
 	float speedx;
-	int damage;
+	int damage = 0;
+	int point = 0;
+	// time counter for item effect
 	int interval = 0;
+	// whether item effect is affect
+	bool onEffect = false;
 };

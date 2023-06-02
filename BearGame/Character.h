@@ -5,9 +5,10 @@
 using namespace sf;
 using namespace std;
 
-struct Character_texture
+struct Bear_texture
 {
-	Texture bear;
+	Texture idle1;
+	Texture idle2;
 	Texture jump;
 	Texture squat;
 };
@@ -40,17 +41,20 @@ public:
 	void idleMove();
 	void jumpMove();
 	void squatMove();
+	void resetMove();
 
+	void setInvincible(bool b) { this->isInvincible = b; };
+	bool checkInvincible() { return this->isInvincible; };
 	Status getStatus() { return this->status; };
 	Sprite getSprite() { return this->character; };
 	int getHP() { return this->HP; };
 	void changeHP(int offset) { this->HP -= offset; };
 private:
 	bool loadTexture(Type);
-	void setTexture(Type);
+	void setAttribute(Type);
 
 	Sprite character;
-	Character_texture texture;
+	Bear_texture texture;
 	int HP;
 	Status status = Character::IDLE;
 
@@ -60,4 +64,5 @@ private:
 	float cd = 5;
 
 	bool idleSwitch = true;
+	bool isInvincible = false;
 };

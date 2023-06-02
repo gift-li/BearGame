@@ -46,6 +46,9 @@ void Game::watchEvent()
 		case Event::KeyPressed:
 			pressInput();
 			break;
+		case Event::KeyReleased:
+			releaseInput();
+			break;
 		case Event::Closed:
 			window.close();
 			break;
@@ -82,6 +85,11 @@ void Game::pressInput()
 	}
 }
 
+void Game::releaseInput()
+{
+	mCharacter->resetMove();
+}
+
 void Game::updateCharacter()
 {
 	if (mCharacter->getStatus() == Character::IDLE)
@@ -105,7 +113,11 @@ void Game::checkCollision()
 	{
 		if(mCharacter->collide(obstacle->getSprite()))
 		{
-			mCharacter->changeHP(obstacle->getDamage());
+			if (mCharacter->checkInvincible() != true)
+			{
+				mCharacter->changeHP(obstacle->getDamage());
+			}
+			this->score += obstacle->getPoint();
 			if (scheduleObstacle == nullptr) {
 				// instantly change to new collide obstacle perform
 				scheduleObstacle = obstacle;

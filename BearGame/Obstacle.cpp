@@ -32,6 +32,7 @@ void Obstacle::setAttribute(Type type)
 		obstacle.setTexture(texture.tree);
 		obstacle.setScale(.15f, .15f);
 		this->damage = 1;
+		this->point = 20;
 		break;
 	case Obstacle::EAGLE:
 		obstacle.setTexture(texture.eagle);
@@ -41,19 +42,19 @@ void Obstacle::setAttribute(Type type)
 	case Obstacle::POTION:
 		obstacle.setTexture(texture.potion);
 		obstacle.setScale(.25f, .25f);
-		this->damage = 0;
-		this->interval = 3000;
+		this->point = 20;
+		this->interval = 2000;
 		break;
 	case Obstacle::HERB:
 		obstacle.setTexture(texture.herb);
 		obstacle.setScale(.25f, .25f);
-		this->damage = 0;
+		this->point = 20;
 		break;
 	case Obstacle::HONEY:
 		obstacle.setTexture(texture.honey);
 		obstacle.setScale(.25f, .25f);
-		this->damage = 0;
-		// this->interval = 5;
+		this->point = 20;
+		this->interval = 2000;
 		break;
 	default:
 		cout << "Invalid obstacle setAttribute" << endl;
@@ -83,29 +84,45 @@ void Obstacle::perform()
 
 void Obstacle::useHerb()
 {
-
+	vector<Obstacle*> obs = Game::getInstance().getObstacle();
+	obs.erase(obs.begin());
 }
 
 void Obstacle::useHoney()
 {
-
+	if (!this->onEffect)
+	{
+		Game::getInstance().getCharacter()->setInvincible(true);
+		this->onEffect = true;
+	}
+	else
+	{
+		this->interval--;
+		if (this->interval == 0)
+		{
+			Game::getInstance().getCharacter()->setInvincible(false);
+			cout << Game::getInstance().getCharacter()->checkInvincible() << endl;
+		}
+	}
 }
 
 void Obstacle::usePotion()
 {
-	/*
-	if (this->interval > 0)
+	if (!this->onEffect)
 	{
 		Game::getInstance().getCharacter()->getSprite()
 			.scale(1.f, 4.f);
-		// cout << Game::getInstance().getCharacter()->getSprite().getScale().y << endl;
+		this->onEffect = true;
 	}
-	else {
-		Game::getInstance().getCharacter()->getSprite()
-			.scale(1.f, .25f);
+	else
+	{
+		this->interval--;
+		if (this->interval == 0)
+		{
+			Game::getInstance().getCharacter()->getSprite()
+				.scale(1.f, .25f);
+		}
 	}
-	this->interval--;
-	*/
 }
 
 bool Obstacle::loadTexture(Type type)
