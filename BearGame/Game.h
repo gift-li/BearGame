@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "Character.h"
-#include "Obstacle.h"
+#include "Object.h"
 
 using namespace sf;
 using namespace std;
@@ -26,7 +26,7 @@ public:
 	void render();
 
 	Character* getCharacter() { return this->mCharacter; };
-	vector<Obstacle*> getObstacle() { return this->mObstacle; };
+	vector<Object*> getObject() { return this->mObject; };
 private:
 	Game();
 	void restart();
@@ -44,27 +44,27 @@ private:
 
 	// current Character
 	Character* mCharacter;
-	// current Obstacles
-	vector<Obstacle*> mObstacle;
-	// perfoming Obstacle
-	Obstacle* scheduleObstacle = nullptr;
+	// current Object
+	vector<Object*> mObject;
+	// perfoming Object
+	Object* mSchedule = nullptr;
 
 	Font font;
 	Text textHP;
 	Text textScore;
-
-	void pressInput();
-	void releaseInput();
 	// can generate Obstacle when equals 0
 	int genCD = 0;
 	// with (1/genProb) chance to generate Obstacle
-	int genProb = 10;
+	int genProb = 15;
+
+	void pressInput();
+	void releaseInput();
 	// update mCharacter
 	void updateCharacter();
-	// dice to generate Obstacle
-	void generateObstacle();
-	// update each Obstacle's position in mObstacle
-	void updateObstacle();
+	// dice to generate Object
+	void genObject();
+	// update each Object's position in mObject
+	void updateObject();
 
 	void initText();
 	void updateTextHP();

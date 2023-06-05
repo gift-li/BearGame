@@ -5,12 +5,11 @@
 using namespace sf;
 using namespace std;
 
-Character::Character(Type type)
+Character::Character()
 {
-	if (loadTexture(type))
+	if (loadTexture())
 	{
-		setAttribute(type);
-		cout << "Load character texture success" << endl;
+		setAttribute();
 	}
 	
 	HP = 3;
@@ -85,8 +84,6 @@ void Character::squat()
 {
 	status = Character::SQUAT;
 	character.setPosition(sf::Vector2f(120.f, 330.f));
-	// move Character Y-axis
-	// character.move(Vector2f());
 }
 
 void Character::squatMove()
@@ -104,32 +101,30 @@ void Character::resetMove()
 	}
 }
 
-bool Character::loadTexture(Type type)
+bool Character::changeHP(int offset)
 {
-	switch (type)
+	if (checkInvincible())
 	{
-	case Character::Bear:
-		return (texture.idle1.loadFromFile("Image/bear_idle1.png")
-			&& texture.idle2.loadFromFile("Image/bear_idle2.png")
-			&& texture.jump.loadFromFile("Image/bear_jump.png")
-			&& texture.squat.loadFromFile("Image/bear_squat.png"));
-	default:
-		cout << "Invalid Character loadTexture" << endl;
-		return false;
+		return false; 
+	}
+	else
+	{
+		this->HP -= offset;
+		return true;
 	}
 }
 
-void Character::setAttribute(Type type)
+bool Character::loadTexture()
 {
-	switch (type)
-	{
-	case Character::Bear:
-		character.setTexture(texture.idle1);
-		character.setScale(0.3f, 0.3f);
-		character.setPosition(sf::Vector2f(120.f, 330.f));
-		break;
-	default:
-		cout << "Invalid Character setTexture" << endl;
-		break;
-	}
+	return (texture.idle1.loadFromFile("Image/bear_idle1.png")
+		&& texture.idle2.loadFromFile("Image/bear_idle2.png")
+		&& texture.jump.loadFromFile("Image/bear_jump.png")
+		&& texture.squat.loadFromFile("Image/bear_squat.png"));
+}
+
+void Character::setAttribute()
+{
+	character.setTexture(texture.idle1);
+	character.setScale(0.3f, 0.3f);
+	character.setPosition(sf::Vector2f(120.f, 330.f));
 }

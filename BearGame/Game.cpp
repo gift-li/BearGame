@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Game.h"
-#include "Character.h"
+#include "Object.h"
 
 using namespace sf;
 using namespace std;
@@ -10,11 +10,11 @@ Game::Game()
 {
 	if (!font.loadFromFile("font/PIXEAB__.TTF"))
 	{
-		// fail loading
 		cout << "Fail loading font" << endl;
 	}
+
 	window.create(VideoMode(1440, 540), "Bear Game");
-	mCharacter = new Character(Character::Bear);
+	mCharacter = new Character();
 	initText();
 }
 
@@ -108,83 +108,82 @@ void Game::updateCharacter()
 
 void Game::checkCollision()
 {
-	vector<Obstacle*> aliveObstacle;
-	for (Obstacle* obstacle : mObstacle)
+	vector<Object*> aliveObject;
+	for (Object* object : mObject)
 	{
-		if(mCharacter->collide(obstacle->getSprite()))
+		if (mCharacter->collide(object->getSprite()))
 		{
-			if (mCharacter->checkInvincible() != true)
+			if (!mCharacter->checkInvincible()
+				&& mCharacter->changeHP(object->getDamage()))
 			{
-				mCharacter->changeHP(obstacle->getDamage());
+				updateTextHP();
 			}
-			this->score += obstacle->getPoint();
-			if (scheduleObstacle == nullptr) {
-				// instantly change to new collide obstacle perform
-				scheduleObstacle = obstacle;
+
+			this->score += object->getPoint() * object->getRatio();
+			updateTextScore();
+
+			if (object->isItem() && mSchedule == nullptr) {
+				// instantly change to new collide object perform
+				mSchedule = object;
 			}
 		}
 		else
 		{
-			aliveObstacle.push_back(obstacle);
+			aliveObject.push_back(object);
 		}
 	}
-	// update mObstacle to alive obstacle
-	this->mObstacle = aliveObstacle;
-	aliveObstacle.clear();
+	// update mObject to alive object
+	this->mObject = aliveObject;
+	aliveObject.clear();
 }
 
 void Game::update()
 {
-	// update objects status
-	if (timer > delay && gameOn)
+	if (timer > delay)
 	{
+		// update objects status
 		if (genCD > 0)
 		{
 			genCD--;
 		}
 		else if (genCD == 0)
 		{
-			generateObstacle();
+			genObject();
 		}
 
 		updateCharacter();
-
-		updateObstacle();
-
-		updateTextHP();
-		updateTextScore();
-
+		updateObject();
 		timer = 0;
 	}
 }
 
-void Game::generateObstacle()
+void Game::genObject()
 {
 	const bool pass = (rand() % genProb <= 1);
 	if (pass)
 	{
-		Obstacle* newObs = new Obstacle(window.getSize().x);
+		Object* newObs = Object::random();
 		genCD = newObs->getGenCD();
 
-		mObstacle.push_back(newObs);
+		mObject.push_back(newObs);
 	}
 }
 
-void Game::updateObstacle()
+void Game::updateObject()
 {
-	vector<Obstacle*> aliveObstacle;
-
-	for (auto& obstacle : mObstacle)
+	vector<Object*> aliveObject;
+	for (auto& object : mObject)
 	{
-		obstacle->move();
+		object->move();
 
-		if (obstacle->getSprite().getPosition().x >= 0)
+		if (object->getSprite().getPosition().x >= 0)
 		{
-			aliveObstacle.push_back(obstacle);
+			aliveObject.push_back(object);
 		}
 	}
 
-	mObstacle = aliveObstacle;
+	mObject = aliveObject;
+	aliveObject.clear();
 }
 
 void Game::initText()
@@ -197,15 +196,17 @@ void Game::initText()
 	_textHP.setFillColor(Color::Red);
 	// assign
 	textHP = _textHP;
+	updateTextHP();
 
 	Text _textScore;
 	// setting
-	_textScore.setPosition(window.getSize().x * 0.05, 0);
+	_textScore.setPosition(window.getSize().x * 0.1, 0);
 	_textScore.setFont(font);
 	_textScore.setCharacterSize(30);
 	_textScore.setFillColor(Color::Black);
 	// assign
 	textScore = _textScore;
+	updateTextScore();
 }
 
 void Game::updateTextHP()
@@ -231,12 +232,12 @@ void Game::updateTextScore()
 
 void Game::doSchedule()
 {
-	if (scheduleObstacle != nullptr)
+	if (mSchedule != nullptr)
 	{
-		scheduleObstacle->perform();
-		if (scheduleObstacle->getInterval() == 0)
+		mSchedule->perform();
+		if (mSchedule->getInterval() == 0)
 		{
-			this->scheduleObstacle = nullptr;
+			this->mSchedule = nullptr;
 		}
 	}
 }
@@ -254,10 +255,10 @@ void Game::render()
 	// draw Character
 	window.draw(mCharacter->getSprite());
 
-	// draw Obstacles
-	for (Obstacle* obstacle : mObstacle)
+	// draw Object
+	for (Object* object : mObject)
 	{
-		window.draw(obstacle->getSprite());
+		window.draw(object->getSprite());
 	}
 
 	// draw text
@@ -270,15 +271,14 @@ void Game::render()
 void Game::restart()
 {
 	mCharacter->reset();
-	mObstacle.clear();
-	scheduleObstacle = nullptr;
+	mObject.clear();
+	mSchedule = nullptr;
 
 	this->genCD = 0;
 	this->score = 0;
 
-	const float x = (window.getSize().x) / 2;
+	this->textHP.setPosition((window.getSize().x) / 2, 0);
 	this->textHP.setString(to_string(mCharacter->getHP()));
-	this->textHP.setPosition(x, 0);
 
 	this->textScore.setString(to_string(this->score));
 

@@ -26,7 +26,7 @@ public:
 		SQUAT,
 		IDLE
 	};
-	Character(Type);
+	Character();
 
 	void reset();
 	// check method: whether collide with input
@@ -43,15 +43,16 @@ public:
 	void squatMove();
 	void resetMove();
 
+	bool changeHP(int);
+
 	void setInvincible(bool b) { this->isInvincible = b; };
 	bool checkInvincible() { return this->isInvincible; };
 	Status getStatus() { return this->status; };
 	Sprite getSprite() { return this->character; };
 	int getHP() { return this->HP; };
-	void changeHP(int offset) { this->HP -= offset; };
 private:
-	bool loadTexture(Type);
-	void setAttribute(Type);
+	bool loadTexture();
+	void setAttribute();
 
 	Sprite character;
 	Bear_texture texture;

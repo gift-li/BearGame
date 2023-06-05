@@ -21,10 +21,25 @@
     <ClCompile Include="Game.cpp">
       <Filter>資源檔</Filter>
     </ClCompile>
-    <ClCompile Include="Obstacle.cpp">
+    <ClCompile Include="Character.cpp">
       <Filter>資源檔</Filter>
     </ClCompile>
-    <ClCompile Include="Character.cpp">
+    <ClCompile Include="Tree.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Eagle.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Potion.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Herb.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Honey.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
       <Filter>資源檔</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +47,25 @@
     <ClInclude Include="Game.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="Obstacle.h">
+    <ClInclude Include="Object.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="Character.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Eagle.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Potion.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Herb.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Honey.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
