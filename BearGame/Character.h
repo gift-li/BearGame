@@ -44,6 +44,7 @@ public:
 	void resetMove();
 
 	bool changeHP(int);
+	void resize(Vector2f);
 
 	void setInvincible(bool b) { this->isInvincible = b; };
 	bool checkInvincible() { return this->isInvincible; };
@@ -56,7 +57,7 @@ private:
 
 	Sprite character;
 	Bear_texture texture;
-	int HP;
+	int HP = 3;
 	Status status = Character::IDLE;
 
 	float jumpHeight;
@@ -64,6 +65,8 @@ private:
 	float g;
 	float cd = 5;
 
+	float baseX = 120.f;
+	float baseY = 330.f;
 	bool idleSwitch = true;
 	bool isInvincible = false;
 };

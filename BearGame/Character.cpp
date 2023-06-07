@@ -11,8 +11,6 @@ Character::Character()
 	{
 		setAttribute();
 	}
-	
-	HP = 3;
 }
 
 void Character::reset()
@@ -24,9 +22,12 @@ void Character::reset()
 	this->status = Character::IDLE;
 	this->isInvincible = false;
 	this->idleSwitch = true;
-	character.setTexture(texture.idle1);
-	character.setPosition(sf::Vector2f(120.f, 330.f));
-	character.setScale(.3f, .3f);
+	this->baseX = 120.f;
+	this->baseY = 330.f;
+	if (loadTexture())
+	{
+		setAttribute();
+	}
 }
 
 bool Character::collide(Sprite obstacle)
@@ -69,10 +70,10 @@ void Character::jump()
 void Character::jumpMove()
 {
 	character.setTexture(texture.jump);
-	character.move(Vector2f(0,-jumpSpeed));
-	jumpSpeed = jumpSpeed - g;
+	character.move(Vector2f(0, -jumpSpeed));
+	jumpSpeed -= g;
 	Vector2f position = character.getPosition();
-	if (position.y >= 330.0f)
+	if (position.y >= baseY)
 	{
 		status = Character::IDLE;
 		idleSwitch = true;
@@ -83,7 +84,6 @@ void Character::jumpMove()
 void Character::squat()
 {
 	status = Character::SQUAT;
-	character.setPosition(sf::Vector2f(120.f, 330.f));
 }
 
 void Character::squatMove()
@@ -114,6 +114,32 @@ bool Character::changeHP(int offset)
 	}
 }
 
+void Character::resize(Vector2f _scale)
+{
+	if (loadTexture())
+	{
+		this->character.scale(_scale);
+		const Vector2f currentPosition = this->character.getPosition();
+		const float height = this->character.getGlobalBounds().height;
+		if (_scale.x > 1 && _scale.y > 1)
+		{
+			this->character.setPosition(
+				currentPosition.x,
+				currentPosition.y - height / 2
+			);
+			this->baseY -= height / 2;
+		}
+		else
+		{
+			this->character.setPosition(
+				currentPosition.x,
+				currentPosition.y + height
+			);
+			this->baseY += height;
+		}
+	}
+}
+
 bool Character::loadTexture()
 {
 	return (texture.idle1.loadFromFile("Image/bear_idle1.png")
@@ -126,5 +152,5 @@ void Character::setAttribute()
 {
 	character.setTexture(texture.idle1);
 	character.setScale(0.3f, 0.3f);
-	character.setPosition(sf::Vector2f(120.f, 330.f));
+	character.setPosition(baseX, baseY);
 }

@@ -16,7 +16,7 @@ void Eagle::setAttribute()
 {
 	this->type = Object::EAGLE;
 	this->damage = 1;
-	this->speedx = rand() % 15 + 20;
+	this->speedx = rand() % 15 + 35;
 
 	this->sprite.setTexture(this->texture);
 	this->scale = Vector2f(.15f, .15f);

@@ -27,6 +27,8 @@ public:
 
 	Character* getCharacter() { return this->mCharacter; };
 	vector<Object*> getObject() { return this->mObject; };
+
+	void resizeCharacter(Vector2f);
 private:
 	Game();
 	void restart();
@@ -52,8 +54,8 @@ private:
 	Font font;
 	Text textHP;
 	Text textScore;
-	// can generate Obstacle when equals 0
-	int genCD = 0;
+	
+	const int MAX_OBJECT = 3;
 	// with (1/genProb) chance to generate Obstacle
 	int genProb = 15;
 

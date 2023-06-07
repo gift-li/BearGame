@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+﻿#include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Game.h"
 #include "Object.h"
@@ -8,6 +8,7 @@ using namespace std;
 
 Game::Game()
 {
+	srand(time(NULL));
 	if (!font.loadFromFile("font/PIXEAB__.TTF"))
 	{
 		cout << "Fail loading font" << endl;
@@ -61,25 +62,29 @@ void Game::watchEvent()
 void Game::pressInput()
 {
 	// trigger event when status is IDLE
-	if (mCharacter->getStatus() == Character::IDLE)
+	if (gameOn)
 	{
-		mCharacter->idle();
+		if (mCharacter->getStatus() == Character::IDLE)
+		{
+			mCharacter->idle();
 
-		if (Keyboard::isKeyPressed(Keyboard::Up))
-		{
-			mCharacter->jump();
+			if (Keyboard::isKeyPressed(Keyboard::Up))
+			{
+				mCharacter->jump();
+			}
+			else if (Keyboard::isKeyPressed(Keyboard::Down))
+			{
+				mCharacter->squat();
+			}
 		}
-		else if (Keyboard::isKeyPressed(Keyboard::Down))
+		// trigger props-cast event
+		else if (Keyboard::isKeyPressed(Keyboard::Space))
 		{
-			mCharacter->squat();
+			// do something
 		}
 	}
-	// trigger props-cast event
-	else if (Keyboard::isKeyPressed(Keyboard::Space))
-	{
-		// do something
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::R))
+
+	if (Keyboard::isKeyPressed(Keyboard::R))
 	{
 		restart();
 	}
@@ -142,11 +147,7 @@ void Game::update()
 	if (timer > delay)
 	{
 		// update objects status
-		if (genCD > 0)
-		{
-			genCD--;
-		}
-		else if (genCD == 0)
+		if (mObject.size() < MAX_OBJECT)
 		{
 			genObject();
 		}
@@ -162,10 +163,7 @@ void Game::genObject()
 	const bool pass = (rand() % genProb <= 1);
 	if (pass)
 	{
-		Object* newObs = Object::random();
-		genCD = newObs->getGenCD();
-
-		mObject.push_back(newObs);
+		mObject.push_back(Object::random());
 	}
 }
 
@@ -174,8 +172,9 @@ void Game::updateObject()
 	vector<Object*> aliveObject;
 	for (auto& object : mObject)
 	{
-		object->move();
+		if (!object->checkAlive()) { continue; };
 
+		object->move();
 		if (object->getSprite().getPosition().x >= 0)
 		{
 			aliveObject.push_back(object);
@@ -232,13 +231,16 @@ void Game::updateTextScore()
 
 void Game::doSchedule()
 {
-	if (mSchedule != nullptr)
+	if (mSchedule)
 	{
-		mSchedule->perform();
-		if (mSchedule->getInterval() == 0)
+		if (mSchedule->getInterval() > 0)
 		{
-			this->mSchedule = nullptr;
+			mSchedule->perform();
+			return;
 		}
+
+		mSchedule->restore();
+		mSchedule = NULL;
 	}
 }
 
@@ -274,13 +276,16 @@ void Game::restart()
 	mObject.clear();
 	mSchedule = nullptr;
 
-	this->genCD = 0;
-	this->score = 0;
-
 	this->textHP.setPosition((window.getSize().x) / 2, 0);
 	this->textHP.setString(to_string(mCharacter->getHP()));
 
+	this->score = 0;
 	this->textScore.setString(to_string(this->score));
 
 	this->gameOn = true;
+}
+
+void Game::resizeCharacter(Vector2f scale)
+{
+	mCharacter->resize(scale);
 }

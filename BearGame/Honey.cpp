@@ -1,3 +1,5 @@
+#include <iostream>
+#include "Game.h"
 #include "Object.h"
 #include "Honey.h"
 
@@ -16,7 +18,7 @@ void Honey::setAttribute()
 {
 	this->type = Object::HONEY;
 	this->point = 20;
-	this->interval = 2000;
+	this->interval = 3000;
 	this->speedx = rand() % 15 + 20;
 
 	this->sprite.setTexture(this->texture);
@@ -29,20 +31,17 @@ void Honey::setAttribute()
 
 void Honey::perform()
 {
-	/*
-	if (!this->onEffect)
-	{
-		Game::getInstance().getCharacter()->setInvincible(true);
-		this->onEffect = true;
-	}
-	else
+	if (this->isTrigger)
 	{
 		this->interval--;
-		if (this->interval == 0)
-		{
-			Game::getInstance().getCharacter()->setInvincible(false);
-			cout << Game::getInstance().getCharacter()->checkInvincible() << endl;
-		}
+		return;
 	}
-	*/
+
+	Game::getInstance().getCharacter()->setInvincible(true);
+	this->isTrigger = true;
+}
+
+void Honey::restore()
+{
+	Game::getInstance().getCharacter()->setInvincible(false);
 }

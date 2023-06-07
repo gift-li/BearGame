@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 using namespace sf;
 using namespace std;
@@ -25,6 +26,7 @@ public:
 	void move() { this->sprite.move(-speedx, 0); };
 	// perform
 	virtual void perform() {};
+	virtual void restore() {};
 
 	static Object* random();
 
@@ -42,7 +44,6 @@ public:
 	int getPoint() { return this->point; };
 	void setPoint(float point) { this->damage = point; };
 	int getRatio() { return this->point_ratio; };
-	int getGenCD() { return this->sprite.getGlobalBounds().width / speedx + 1;	};
 	int getInterval() { return this->interval; };
 	int minusInterval(int offset) { this->interval -= offset; };
 	bool checkAlive() { return this->isAlive; };
@@ -66,9 +67,9 @@ protected:
 	// add ratio if destroyed by item
 	int point_ratio = 1;
 	// item effect time counter
-	int interval = 0;
-	// whether item effect is affect
-	bool onEffect = false;
+	int interval = 1;
+	// whether item effect is trigger
+	bool isTrigger = false;
 	// check object still alive;
 	bool isAlive = true;
 };

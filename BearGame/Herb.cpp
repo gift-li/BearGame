@@ -1,3 +1,4 @@
+#include "Game.h"
 #include "Object.h"
 #include "Herb.h"
 
@@ -28,8 +29,9 @@ void Herb::setAttribute()
 
 void Herb::perform()
 {
-	/*
-	vector<Obstacle*> obs = Game::getInstance().getObstacle();
-	obs.erase(obs.begin());
-	*/
+	if (Game::getInstance().getObject().size() > 0)
+	{
+		Game::getInstance().getObject().front()->setAlive(false);
+	}
+	this->interval--;
 }
