@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Character.h"
+#include "Object.h"
 
 using namespace sf;
 using namespace std;
@@ -50,7 +51,7 @@ void Character::idleMove()
 			character.setTexture(texture.idle2);
 			idleSwitch = false;
 		}
-		else 
+		else
 		{
 			character.setTexture(texture.idle1);
 			idleSwitch = true;
@@ -105,7 +106,7 @@ bool Character::changeHP(int offset)
 {
 	if (checkInvincible())
 	{
-		return false; 
+		return false;
 	}
 	else
 	{

@@ -48,6 +48,8 @@ public:
 	int minusInterval(int offset) { this->interval -= offset; };
 	bool checkAlive() { return this->isAlive; };
 	void setAlive(bool isAlive) { this->isAlive = isAlive; };
+	bool getLow() { return this->isLow; };
+	bool getHoney() { return this->isHoney; };
 protected:
 	virtual void setAttribute() {};
 
@@ -72,4 +74,8 @@ protected:
 	bool isTrigger = false;
 	// check object still alive;
 	bool isAlive = true;
+	// check eagle is low or not
+	bool isLow = false;
+	// check eat honey or not
+	bool isHoney = false;
 };

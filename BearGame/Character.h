@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
+#include "Object.h"
 
 using namespace sf;
 using namespace std;
@@ -54,6 +55,7 @@ public:
 private:
 	bool loadTexture();
 	void setAttribute();
+	void invicible();
 
 	Sprite character;
 	Bear_texture texture;

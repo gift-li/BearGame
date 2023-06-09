@@ -15,17 +15,22 @@ Herb::Herb()
 
 void Herb::setAttribute()
 {
-	this->type = Object::HERB;
-	this->point = 20;
-	this->speedx = rand() % 15 + 20;
+    this->type = Object::HERB;
+    this->speedx = rand() % 15 + 20;
 
-	this->sprite.setTexture(this->texture);
-	this->scale = Vector2f(.25f, .25f);
-	this->sprite.setScale(this->scale);
-	this->sprite.setPosition(
-		this->window_width,
-		rand() % (int)(435 - this->sprite.getGlobalBounds().height));
+    this->sprite.setTexture(this->texture);
+    this->scale = Vector2f(.25f, .25f);
+
+    // Set the y-coordinate within the desired range
+    int y = rand() % (320 - 160 + 1) + 160;
+
+    this->sprite.setScale(this->scale);
+    this->sprite.setPosition(
+        this->window_width,
+        y
+    );
 }
+
 
 void Herb::perform()
 {

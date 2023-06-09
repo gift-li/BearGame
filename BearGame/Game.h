@@ -15,6 +15,7 @@ public:
 		static Game instance;
 		return instance;
 	};
+	void drawStartScreen();
 	void run();
 
 	// watch keyboard event
@@ -34,6 +35,7 @@ private:
 	void restart();
 	RenderWindow window;
 	Clock clock;
+	Clock scoreTimer;
 	// loop timer
 	float timer = 0;
 	// variant to control fps
@@ -43,6 +45,8 @@ private:
 
 	// status showing game is continue
 	bool gameOn = true;
+
+	bool gameStarted = false;
 
 	// current Character
 	Character* mCharacter;
@@ -54,6 +58,9 @@ private:
 	Font font;
 	Text textHP;
 	Text textScore;
+
+	Texture explosionTexture;
+	Texture goldenCircleTexture;
 	
 	const int MAX_OBJECT = 3;
 	// with (1/genProb) chance to generate Obstacle

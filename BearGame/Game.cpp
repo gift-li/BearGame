@@ -17,24 +17,64 @@ Game::Game()
 	window.create(VideoMode(1440, 540), "Bear Game");
 	mCharacter = new Character();
 	initText();
+
+	if (!explosionTexture.loadFromFile("Image/explosion.png"))
+	{
+		cout << "Failed to load explosion texture" << endl;
+	}
+}
+
+void Game::drawStartScreen()
+{
+	window.clear(sf::Color::White);
+
+	sf::Text startText;
+	startText.setFont(font);
+	startText.setString("BEAR GAME");
+	startText.setCharacterSize(50);
+	startText.setFillColor(sf::Color::Black);
+	startText.setStyle(sf::Text::Bold);
+	startText.setPosition(window.getSize().x / 2 - startText.getLocalBounds().width / 2,
+		window.getSize().y / 2 - startText.getLocalBounds().height / 2);
+
+	window.draw(startText);
+
+	window.display();
 }
 
 void Game::run()
 {
 	while (window.isOpen()) {
-		float time = clock.getElapsedTime().asSeconds();
-		clock.restart();
-		timer += time;
+		if (!gameStarted) {
+			drawStartScreen();
 
-		watchEvent();
-		if (gameOn)
-		{
-			checkCollision();
-			doSchedule();
-			update();
-			render();
+			sf::Event event;
+			while (window.pollEvent(event)) {
+				if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+					gameStarted = true;
+					clock.restart();
+				}
+				if (event.type == sf::Event::Closed) {
+					window.close();
+				}
+			}
+		}
+		else {
+			float time = clock.getElapsedTime().asSeconds();
+			clock.restart();
+			timer += time;
+
+			watchEvent();
+			if (gameOn)
+			{
+				checkCollision();
+				doSchedule();
+				update();
+				render();
+			}
 		}
 	}
+
 }
 
 void Game::watchEvent()
@@ -119,7 +159,8 @@ void Game::checkCollision()
 		if (mCharacter->collide(object->getSprite()))
 		{
 			if (!mCharacter->checkInvincible()
-				&& mCharacter->changeHP(object->getDamage()))
+				&& mCharacter->changeHP(object->getDamage())
+				&& !object->getLow())
 			{
 				updateTextHP();
 			}
@@ -155,6 +196,14 @@ void Game::update()
 		updateCharacter();
 		updateObject();
 		timer = 0;
+	}
+
+	if (scoreTimer.getElapsedTime().asSeconds() >= 0.1)
+	{
+		this->score += 10;
+		updateTextScore();
+		printf("%i\n", score);
+		scoreTimer.restart();
 	}
 }
 
