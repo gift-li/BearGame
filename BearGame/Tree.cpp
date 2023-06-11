@@ -16,7 +16,7 @@ void Tree::setAttribute()
 {
 	this->type = Object::TREE;
 	this->damage = 1;
-	this->point = 20;
+	this->point = 200;
 	this->speedx = rand() % 15 + 35;
 
 	this->sprite.setTexture(this->texture);

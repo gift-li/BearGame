@@ -32,7 +32,7 @@ void Game::drawStartScreen()
 
 	Text startText;
 	startText.setFont(font);
-	startText.setString("BEAR GAME\nPress space to start");
+	startText.setString("       BEAR GAME\nPress SPACE to start");
 	startText.setCharacterSize(50);
 	startText.setFillColor(Color::Black);
 	startText.setStyle(Text::Bold);
@@ -285,7 +285,7 @@ void Game::updateTextHP()
 	}
 	else
 	{
-		textHP.setString("You lose!\nPress R to restart!\nScore: " + to_string(objectScore+timeScore+20));
+		textHP.setString("Game Over!\nPress R to restart\nScore: " + to_string(timeScore + objectScore+ 200));
 		const float x = (window.getSize().x - textHP.getLocalBounds().width) / 2;
 		textHP.setPosition(x, 0);
 		gameOn = false;
@@ -369,7 +369,7 @@ void Game::restart()
 
 	this->timeScore = 0;
 	this->objectScore = 0;
-	this->textScore.setString(to_string(objectScore) + " + " + to_string(timeScore));
+	this->textScore.setString(to_string(timeScore) + " + " + to_string(objectScore));
 	updateTextInvincible();
 
 	this->gameOn = true;
