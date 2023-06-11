@@ -48,7 +48,7 @@ public:
 	int minusInterval(int offset) { this->interval -= offset; };
 	bool checkAlive() { return this->isAlive; };
 	void setAlive(bool isAlive) { this->isAlive = isAlive; };
-	bool getLow() { return this->isLow; };
+	bool checkLow() { return this->isLow; };
 	bool getHoney() { return this->isHoney; };
 protected:
 	virtual void setAttribute() {};

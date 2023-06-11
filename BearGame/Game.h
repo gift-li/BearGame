@@ -28,8 +28,6 @@ public:
 
 	Character* getCharacter() { return this->mCharacter; };
 	vector<Object*> getObject() { return this->mObject; };
-
-	void resizeCharacter(Vector2f);
 private:
 	Game();
 	void restart();
@@ -41,7 +39,8 @@ private:
 	// variant to control fps
 	float delay = 0.05;
 	// score to show
-	int score = 0;
+	int timeScore = 0;
+	int objectScore = 0;
 
 	// status showing game is continue
 	bool gameOn = true;
@@ -58,13 +57,15 @@ private:
 	Font font;
 	Text textHP;
 	Text textScore;
+	Text textInvincible;
 
 	Texture explosionTexture;
 	Texture goldenCircleTexture;
 	
-	const int MAX_OBJECT = 3;
 	// with (1/genProb) chance to generate Obstacle
-	int genProb = 15;
+	int genProb = 10;
+	const int GEN_CD = 20;
+	int genCD = 20;
 
 	void pressInput();
 	void releaseInput();
@@ -78,4 +79,5 @@ private:
 	void initText();
 	void updateTextHP();
 	void updateTextScore();
+	void updateTextInvincible();
 };

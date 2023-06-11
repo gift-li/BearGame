@@ -12,6 +12,7 @@ struct Bear_texture
 	Texture idle2;
 	Texture jump;
 	Texture squat;
+	Texture golden_circle;
 };
 
 class Character
@@ -55,7 +56,6 @@ public:
 private:
 	bool loadTexture();
 	void setAttribute();
-	void invicible();
 
 	Sprite character;
 	Bear_texture texture;

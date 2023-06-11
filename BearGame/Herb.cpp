@@ -17,6 +17,7 @@ void Herb::setAttribute()
 {
     this->type = Object::HERB;
     this->speedx = rand() % 15 + 20;
+    this->point = 20;
 
     this->sprite.setTexture(this->texture);
     this->scale = Vector2f(.25f, .25f);

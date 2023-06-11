@@ -18,27 +18,30 @@ Game::Game()
 	mCharacter = new Character();
 	initText();
 
+	/*
 	if (!explosionTexture.loadFromFile("Image/explosion.png"))
 	{
 		cout << "Failed to load explosion texture" << endl;
 	}
+	*/
 }
 
 void Game::drawStartScreen()
 {
-	window.clear(sf::Color::White);
+	window.clear(Color::White);
 
-	sf::Text startText;
+	Text startText;
 	startText.setFont(font);
-	startText.setString("BEAR GAME");
+	startText.setString("BEAR GAME\nPress space to start");
 	startText.setCharacterSize(50);
-	startText.setFillColor(sf::Color::Black);
-	startText.setStyle(sf::Text::Bold);
-	startText.setPosition(window.getSize().x / 2 - startText.getLocalBounds().width / 2,
-		window.getSize().y / 2 - startText.getLocalBounds().height / 2);
+	startText.setFillColor(Color::Black);
+	startText.setStyle(Text::Bold);
+	startText.setPosition(
+		window.getSize().x / 2 - startText.getLocalBounds().width / 2,
+		window.getSize().y / 2 - startText.getLocalBounds().height / 2
+	);
 
 	window.draw(startText);
-
 	window.display();
 }
 
@@ -102,25 +105,17 @@ void Game::watchEvent()
 void Game::pressInput()
 {
 	// trigger event when status is IDLE
-	if (gameOn)
+	if (gameOn && mCharacter->getStatus() == Character::IDLE)
 	{
-		if (mCharacter->getStatus() == Character::IDLE)
-		{
-			mCharacter->idle();
+		mCharacter->idle();
 
-			if (Keyboard::isKeyPressed(Keyboard::Up))
-			{
-				mCharacter->jump();
-			}
-			else if (Keyboard::isKeyPressed(Keyboard::Down))
-			{
-				mCharacter->squat();
-			}
-		}
-		// trigger props-cast event
-		else if (Keyboard::isKeyPressed(Keyboard::Space))
+		if (Keyboard::isKeyPressed(Keyboard::Up))
 		{
-			// do something
+			mCharacter->jump();
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Down))
+		{
+			mCharacter->squat();
 		}
 	}
 
@@ -158,14 +153,26 @@ void Game::checkCollision()
 	{
 		if (mCharacter->collide(object->getSprite()))
 		{
-			if (!mCharacter->checkInvincible()
-				&& mCharacter->changeHP(object->getDamage())
-				&& !object->getLow())
+			if (!mCharacter->checkInvincible())
 			{
-				updateTextHP();
+				if (object->checkLow())
+				{
+					if (mCharacter->getStatus() != Character::SQUAT)
+					{
+						if (mCharacter->changeHP(object->getDamage())) {
+							updateTextHP();
+						}
+					}
+				}
+				else
+				{
+					if (mCharacter->changeHP(object->getDamage())) {
+						updateTextHP();
+					}
+				}
 			}
 
-			this->score += object->getPoint() * object->getRatio();
+			this->objectScore += object->getPoint() * object->getRatio();
 			updateTextScore();
 
 			if (object->isItem() && mSchedule == nullptr) {
@@ -188,9 +195,13 @@ void Game::update()
 	if (timer > delay)
 	{
 		// update objects status
-		if (mObject.size() < MAX_OBJECT)
+		if (genCD == 0)
 		{
 			genObject();
+		}
+		else
+		{
+			genCD--;
 		}
 
 		updateCharacter();
@@ -200,9 +211,8 @@ void Game::update()
 
 	if (scoreTimer.getElapsedTime().asSeconds() >= 0.1)
 	{
-		this->score += 10;
+		this->timeScore += 10;
 		updateTextScore();
-		printf("%i\n", score);
 		scoreTimer.restart();
 	}
 }
@@ -213,6 +223,7 @@ void Game::genObject()
 	if (pass)
 	{
 		mObject.push_back(Object::random());
+		genCD = GEN_CD;
 	}
 }
 
@@ -255,6 +266,14 @@ void Game::initText()
 	// assign
 	textScore = _textScore;
 	updateTextScore();
+
+	Text _textInvincible;
+	_textInvincible.setPosition(window.getSize().x / 2, 50);
+	_textInvincible.setFont(font);
+	_textInvincible.setCharacterSize(30);
+	_textInvincible.setFillColor(Color::Green);
+	textInvincible = _textInvincible;
+	updateTextInvincible();
 }
 
 void Game::updateTextHP()
@@ -266,7 +285,7 @@ void Game::updateTextHP()
 	}
 	else
 	{
-		textHP.setString("You lose!\nPress R to restart!");
+		textHP.setString("You lose!\nPress R to restart!\nScore: " + to_string(objectScore+timeScore+20));
 		const float x = (window.getSize().x - textHP.getLocalBounds().width) / 2;
 		textHP.setPosition(x, 0);
 		gameOn = false;
@@ -275,7 +294,21 @@ void Game::updateTextHP()
 
 void Game::updateTextScore()
 {
-	textScore.setString(to_string(score));
+	textScore.setString(to_string(objectScore)+" + " + to_string(timeScore));
+}
+
+void Game::updateTextInvincible()
+{
+	if (mCharacter->checkInvincible())
+	{
+		textInvincible.setString("~!! Invincible !!~");
+	}
+	else
+	{
+		textInvincible.setString("");
+	}
+	const float x = (window.getSize().x - textInvincible.getLocalBounds().width) / 2;
+	textInvincible.setPosition(x, 50);
 }
 
 void Game::doSchedule()
@@ -285,11 +318,13 @@ void Game::doSchedule()
 		if (mSchedule->getInterval() > 0)
 		{
 			mSchedule->perform();
+			updateTextInvincible();
 			return;
 		}
 
 		mSchedule->restore();
 		mSchedule = NULL;
+		updateTextInvincible();
 	}
 }
 
@@ -315,6 +350,10 @@ void Game::render()
 	// draw text
 	window.draw(textHP);
 	window.draw(textScore);
+	if (gameOn)
+	{
+		window.draw(textInvincible);
+	}
 	
 	window.display();
 }
@@ -328,13 +367,10 @@ void Game::restart()
 	this->textHP.setPosition((window.getSize().x) / 2, 0);
 	this->textHP.setString(to_string(mCharacter->getHP()));
 
-	this->score = 0;
-	this->textScore.setString(to_string(this->score));
+	this->timeScore = 0;
+	this->objectScore = 0;
+	this->textScore.setString(to_string(objectScore) + " + " + to_string(timeScore));
+	updateTextInvincible();
 
 	this->gameOn = true;
-}
-
-void Game::resizeCharacter(Vector2f scale)
-{
-	mCharacter->resize(scale);
 }

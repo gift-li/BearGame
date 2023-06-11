@@ -16,6 +16,7 @@ void Eagle::setAttribute()
 {
     this->type = Object::EAGLE;
     this->damage = 1;
+    this->point = 20;
     this->speedx = rand() % 15 + 35;
 
     this->sprite.setTexture(this->texture);
@@ -36,7 +37,6 @@ void Eagle::setAttribute()
         isLow = true;
         break;
     }
-
     this->sprite.setPosition(
         this->window_width,
         yCoordinate);

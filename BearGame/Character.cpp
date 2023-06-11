@@ -31,9 +31,9 @@ void Character::reset()
 	}
 }
 
-bool Character::collide(Sprite obstacle)
+bool Character::collide(Sprite object)
 {
-	return character.getGlobalBounds().intersects(obstacle.getGlobalBounds());
+	return character.getGlobalBounds().intersects(object.getGlobalBounds());
 }
 
 void Character::idle()
