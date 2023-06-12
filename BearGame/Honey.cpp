@@ -17,7 +17,7 @@ Honey::Honey()
 void Honey::setAttribute()
 {
 	this->type = Object::HONEY;
-	this->interval = 3000;
+	this->interval = 5000;
 	this->point = 0;
 	this->speedx = rand() % 15 + 20;
 
